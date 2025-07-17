@@ -1,0 +1,22 @@
+/* src/index.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  font-family: "Arial", sans-serif;
+  line-height: 1.6;
+}
+
+.arabic-numbers {
+  font-family: "Arial", sans-serif;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}

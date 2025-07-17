@@ -1,0 +1,14 @@
+.app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.clickable-row:hover {
+  background-color: #e0f7fa !important;
+}
