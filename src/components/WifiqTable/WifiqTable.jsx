@@ -205,7 +205,19 @@ const WifiqTable = ({ total }) => {
               <tr
                 key={wifiq.id}
                 onClick={() =>
-                  isClickable && navigate(`/wifiq/${wifiq.type}/${miftah}`)
+                  isClickable &&
+                  navigate(`/wifiq/${wifiq.type}`, {
+                    state: {
+                      miftah,
+                      maghlaq: calculateMaghlaq(miftah, wifiq.type),
+                      adl: calculateAdl(miftah, maghlaq),
+                      tarh: calculateTarh(miftah, wifiq.type),
+                      wafaq: calculateWafaq(miftah, wifiq.type),
+                      masaha: calculateMasaha(wifiq.type, wafaq),
+                      dabit: calculateDabit(wafaq, masaha),
+                      ghayah: calculateGhayah(wafaq, wifiq.type),
+                    },
+                  })
                 }
                 style={{
                   cursor: isClickable ? "pointer" : "default",

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Navbar from "./components/Navbar/Navbar"
 import AbajadCalculator from "./components/AbajadCalculator/AbajadCalculator"
 import "./App.css"
-import WifiqPage from "./pages/WifiqPage"
+import WifiqDetailPage from "./pages/WifiqDetailPage"
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <div className="app-container">
           <Routes>
             <Route path="/" element={<AbajadCalculator />} />
-            <Route path="/wifiq/:type/:miftah" element={<WifiqPage />} />
+            <Route path="/wifiq/:type" element={<WifiqDetailPage />} />
           </Routes>
         </div>
       </div>

@@ -12,3 +12,13 @@
 .clickable-row:hover {
   background-color: #e0f7fa !important;
 }
+
+/* src/App.css */
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.clickable-row:hover {
+  background-color: #e0f7fa !important;
+}

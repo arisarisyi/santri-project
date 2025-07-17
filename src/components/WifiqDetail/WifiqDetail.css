@@ -1,0 +1,216 @@
+/* src/components/WifiqDetail/WifiqDetail.css */
+.wifiq-detail-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 15px;
+  font-family: "Arial", sans-serif;
+}
+
+.wifiq-header {
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.wifiq-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+}
+
+.wifiq-header p {
+  margin: 10px 0 0;
+  font-size: 1.3rem;
+}
+
+.wifiq-values {
+  background-color: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.wifiq-values h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.value-card {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+}
+
+.value-card:hover {
+  transform: translateY(-5px);
+}
+
+.value-title {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.value-number {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #3498db;
+}
+
+.planetary-section {
+  background-color: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.planetary-section h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.explanation {
+  text-align: center;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto 25px;
+  line-height: 1.6;
+}
+
+.tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.planetary-table-container {
+  flex: 1;
+  max-width: 100%;
+}
+
+.planetary-table-container h3 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+
+th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.highlight-cell {
+  font-weight: bold;
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+  }
+}
+
+/* Responsiveness */
+@media (max-width: 992px) {
+  .tables-container {
+    flex-direction: column;
+  }
+
+  .values-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .wifiq-header {
+    padding: 20px 15px;
+  }
+
+  .wifiq-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .wifiq-header p {
+    font-size: 1.1rem;
+  }
+
+  .wifiq-values,
+  .planetary-section {
+    padding: 20px;
+  }
+
+  .value-card {
+    padding: 15px;
+  }
+
+  .value-title {
+    font-size: 1rem;
+  }
+
+  .value-number {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .values-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+  }
+
+  .value-number {
+    font-size: 1.3rem;
+  }
+}
