@@ -200,7 +200,8 @@ const WifiqTable = ({ total }) => {
             const dabit = calculateDabit(wafaq, masaha)
             const ghayah = calculateGhayah(wafaq, wifiq.type)
 
-            const isClickable = miftah !== "-"
+            const isClickable = miftah !== "-" && wifiq.type !== "muassyar"
+
             return (
               <tr
                 key={wifiq.id}

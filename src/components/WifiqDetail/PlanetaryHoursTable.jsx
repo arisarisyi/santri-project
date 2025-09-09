@@ -2,18 +2,34 @@
 import React from "react"
 import "./WifiqDetail.css"
 
-const PlanetaryHoursTable = ({ title, type, currentType, isNight }) => {
-  // Data untuk tabel jam planet
+const PlanetaryHoursTable = ({ title, currentType, isNight }) => {
   const headers = [
     "السبت",
     "الجمعة",
     "الخميس",
-    "الربعاء",
+    "الربعاء", // catatan: konsisten dengan data kamu
     "الثلاثاء",
     "الاثنين",
     "الأحد",
     "الساعة",
   ]
+
+  // helper: warna transparan untuk highlight muda
+  const hexToRgba = (hex, alpha) => {
+    const h = hex.replace("#", "")
+    const full =
+      h.length === 3
+        ? h
+            .split("")
+            .map((c) => c + c)
+            .join("")
+        : h
+    const n = parseInt(full, 16)
+    const r = (n >> 16) & 255,
+      g = (n >> 8) & 255,
+      b = n & 255
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
 
   const rows = isNight
     ? [
@@ -261,7 +277,6 @@ const PlanetaryHoursTable = ({ title, type, currentType, isNight }) => {
         ],
       ]
 
-  // Tentukan indeks kolom berdasarkan hari
   const dayIndexMap = {
     السبت: 0,
     الجمعة: 1,
@@ -273,6 +288,7 @@ const PlanetaryHoursTable = ({ title, type, currentType, isNight }) => {
   }
 
   const targetDayIndex = dayIndexMap[currentType.day]
+  const timeColIndex = headers.length - 1
 
   return (
     <div className="planetary-table-container">
@@ -281,29 +297,37 @@ const PlanetaryHoursTable = ({ title, type, currentType, isNight }) => {
         <table>
           <thead>
             <tr>
-              {headers.map((header, index) => (
-                <th key={index}>{header}</th>
+              {headers.map((h, i) => (
+                <th key={i}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell, cellIndex) => {
-                  // Tentukan apakah sel ini harus di-highlight
-                  const isHighlighted =
-                    cellIndex === targetDayIndex && cell === currentType.planet
+            {rows.map((row, rIdx) => (
+              <tr key={rIdx}>
+                {row.map((cell, cIdx) => {
+                  if (cIdx === timeColIndex) return <td key={cIdx}>{cell}</td>
+
+                  const isPlanet = cell === currentType.planet
+                  const isPrimary = isPlanet && cIdx === targetDayIndex
+
+                  let style = {}
+                  let className = ""
+                  if (isPrimary) {
+                    style = {
+                      backgroundColor: currentType.color,
+                      color: "#fff",
+                    }
+                    className = "highlight-cell primary"
+                  } else if (isPlanet) {
+                    style = {
+                      backgroundColor: hexToRgba(currentType.color, 0.18),
+                    }
+                    className = "highlight-cell planet-only"
+                  }
 
                   return (
-                    <td
-                      key={cellIndex}
-                      className={isHighlighted ? "highlight-cell" : ""}
-                      style={
-                        isHighlighted
-                          ? { backgroundColor: currentType.color }
-                          : {}
-                      }
-                    >
+                    <td key={cIdx} className={className} style={style}>
                       {cell}
                     </td>
                   )

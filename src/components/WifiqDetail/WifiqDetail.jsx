@@ -4,6 +4,8 @@ import { useParams, useLocation } from "react-router-dom"
 import PlanetaryHoursTable from "./PlanetaryHoursTable"
 import { toArabicNumbers } from "../../utils/numbers"
 import "./WifiqDetail.css"
+import AngelNamesDisplay from "./AngelNamesDisplay"
+import SufliyyahAngels from "./SufliyyahAngels"
 
 const WifiqDetail = () => {
   const { type } = useParams()
@@ -55,12 +57,12 @@ const WifiqDetail = () => {
       planet: "المشترى",
       color: "#1abc9c",
     },
-    muassyar: {
-      name: "مُعَشَّر",
-      size: "10×10",
+    mutassa: {
+      name: "مُتسع",
+      size: "9×9",
       day: "الاثنين",
       planet: "القمر",
-      color: "#d35400",
+      color: "#6970bbff",
     },
   }
 
@@ -133,6 +135,26 @@ const WifiqDetail = () => {
           </div>
         </div>
       </div>
+
+      <AngelNamesDisplay
+        miftah={miftah}
+        maghlaq={maghlaq}
+        adl={adl}
+        wafaq={wafaq}
+        masaha={masaha}
+        dabit={dabit}
+        ghayah={ghayah}
+      />
+
+      <SufliyyahAngels
+        miftah={miftah}
+        maghlaq={maghlaq}
+        adl={adl}
+        wafaq={wafaq}
+        masaha={masaha}
+        dabit={dabit}
+        ghayah={ghayah}
+      />
 
       <div className="planetary-section">
         <h2>ساعات الكواكب</h2>

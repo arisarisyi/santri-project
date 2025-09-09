@@ -7,6 +7,7 @@ import WifiqTable from "../WifiqTable/WifiqTable"
 // Kamus nilai Abajadun
 const abajadValues = {
   ا: 1,
+  ٱ: 1,
   أ: 1,
   إ: 1,
   آ: 1,
@@ -20,7 +21,9 @@ const abajadValues = {
   ح: 8,
   ط: 9,
   ي: 10,
+  یَ: 10,
   ى: 10,
+  ی: 10,
   ك: 20,
   ل: 30,
   م: 40,

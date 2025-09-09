@@ -1,0 +1,291 @@
+import React, { useEffect, useMemo, useState } from "react"
+
+/**
+ * TaukilSamples (Pure CSS version)
+ * — Tidak menggunakan Tailwind. Semua styling murni CSS disuntikkan sekali ke <head>.
+ */
+
+// ====== PURE CSS (injected once) ======
+const CSS_TEXT = `
+:root{--green:#10b981;--amber:#f59e0b;--border:#ddd;--text:#222;--muted:#666;--bg:#fff;--cardShadow:0 1px 2px rgba(0,0,0,.06)}
+.taukil-container{max-width:980px;margin:0 auto;padding:16px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;color:var(--text)}
+.taukil-title{font-size:28px;font-weight:800;letter-spacing:-.3px;margin:0}
+.taukil-desc{margin:8px 0 12px;color:var(--muted);font-size:14.5px}
+.taukil-tabs{display:flex;gap:8px;margin-top:8px}
+.taukil-tab{border:1px solid var(--border);border-radius:999px;padding:8px 12px;background:#fff;color:#222;cursor:pointer;transition:background .15s,border-color .15s,transform .05s}
+.taukil-tab:active{transform:scale(.99)}
+.taukil-tab--active.baik{background:var(--green);border-color:var(--green);color:#fff}
+.taukil-tab--active.buruk{background:var(--amber);border-color:var(--amber);color:#fff}
+
+.taukil-grid{margin-top:24px;display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.taukil-inputs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
+
+.taukil-card{border:1px solid var(--border);border-radius:16px;padding:16px;background:#fff;box-shadow:var(--cardShadow)}
+.taukil-card.baik{background:#ecfdf5;border-color:#a7f3d0}
+.taukil-card.buruk{background:#fffbeb;border-color:#fde68a}
+
+.taukil-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.taukil-card-title{font-size:18px;font-weight:800;margin:0 0 6px}
+.taukil-card-kategori{font-size:12px;color:var(--muted)}
+
+.copy-btn{font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer}
+.copy-btn:active{transform:scale(.99)}
+
+.param{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.param>span{color:#555}
+.param input{padding:8px 10px;border:1px solid var(--border);border-radius:8px;outline:none}
+.param input:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(147,197,253,.35)}
+
+.section-title{margin-top:12px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#555}
+
+.text-arabic{direction:rtl;text-align:right;white-space:pre-wrap;font-size:18px;line-height:1.9;background:#fff;border:1px solid #e5e7eb;padding:12px;border-radius:12px;font-family:"Scheherazade New","Amiri",serif}
+
+.taukil-foot{margin-top:16px;color:#777;font-size:12px;line-height:1.6}
+`
+
+const ensureCSS = () => {
+  if (typeof document === "undefined") return
+  if (!document.getElementById("taukil-samples-css")) {
+    const style = document.createElement("style")
+    style.id = "taukil-samples-css"
+    style.textContent = CSS_TEXT
+    document.head.appendChild(style)
+  }
+}
+
+// ====== UI helpers ======
+const CopyBtn = ({ text }) => {
+  const [ok, setOk] = useState(false)
+  return (
+    <button
+      className="copy-btn"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(text || "")
+          setOk(true)
+          setTimeout(() => setOk(false), 1200)
+        } catch {}
+      }}
+      aria-label="Salin teks"
+    >
+      {ok ? "Tersalin ✓" : "Salin"}
+    </button>
+  )
+}
+
+const ParamInput = ({ label, value, onChange, dir = "rtl" }) => (
+  <label className="param">
+    <span>{label}</span>
+    <input value={value} onChange={(e) => onChange(e.target.value)} dir={dir} />
+  </label>
+)
+
+// ====== Templates ======
+const templates = [
+  // --- Hajat Buruk / تصريف ---
+  {
+    id: "tfrq-2names",
+    category: "buruk",
+    title: "تفريق بين شخصين (Contoh)",
+    params: [
+      { key: "female", label: "اسم المرأة" },
+      { key: "motherFemale", label: "اسم أمّها" },
+      { key: "male", label: "اسم الرجل" },
+      { key: "motherMale", label: "اسم أمّه" },
+    ],
+    defaults: {
+      female: "فَانْيَا مَهْدَا حَنِيفَة",
+      motherFemale: "إِلْفِيرَا رَاتْنَا بُوتْرِي",
+      male: "نُغْرُوهُو دُوِي هَارِيَانْتُو",
+      motherMale: "حَوَّاء",
+    },
+    build: (
+      v
+    ) => `توَكَّلُوا يَا خُدَّامَ هَذِهِ الأَسْمَاءِ الشَّرِيفَةِ، وَخُدَّامَ الحُرُوفِ،
+فَرِّقُوا بَيْنَ ${v.female} بِنْتِ ${v.motherFemale}،
+وَبَيْنَ ${v.male} بْنِ ${v.motherMale}،
+كَمَا فَرَّقَ رَبُّنَا بَيْنَ السَّمَاءِ وَالأَرْضِ،
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+  {
+    id: "cloud-divert",
+    category: "buruk",
+    title: "تصريف السحب عن منطقة (Contoh)",
+    params: [
+      { key: "region", label: "المنطقة" },
+      { key: "days", label: "عدد الأيام", dir: "ltr" },
+    ],
+    defaults: { region: "[اذكر المنطقة]", days: "[عدد الأيام]" },
+    build: (
+      v
+    ) => `يَا خُدَّامُ هَذِهِ الأَسْمَاءِ الشَّرِيفَة، وَخُدَّامُ الحُرُوفِ وَالطَّلَاسِمِ، بِسِرِّ: يَا جَبَّار، يَا قَاهِر، يَا رَافِع، يَا مُصَرِّف، يَا رَبَّ السَّمَاءِ وَالأَرْضِ،
+وَبِحُرْمَةِ: أَلِف، دَال، مِيم، رَاء، غَيْن، شِين، قَاف،
+وَبِرَمْزِ: طه، يس، كهيعص، قسورة، حم عسق،
+أَنْ تُصَرِّفُوا غُيُومَ السَّمَاءِ عَنْ مَنَاطِقِ ${v.region}
+وَلَا تَجْعَلُوا فِيهَا وَابِلًا وَلا رَذَاذًا، إِلَى أَمَدٍ ${v.days}،
+وَأَنْ تَجْعَلُوا السَّحَابَ نَحْوَ الأَرْضِ الَّتِي فِيهَا خَيْرٌ وَمَنْفَعَةٌ، وَذٰلِكَ بِقُدْرَةِ ٱللّٰهِ وَبِٱسْمِهِ أُجْرِيكُمْ وَعَلَيْهِ أَتَوَكَّلُ.
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+  {
+    id: "radd-kayd",
+    category: "buruk",
+    title: "رَدُّ الكَيْدِ وَصَرْفُ الأَذَى",
+    params: [{ key: "source", label: "مصدر الأذى (اختياري)" }],
+    defaults: { source: "[—]" },
+    build: (
+      v
+    ) => `يَا خُدَّامَ هَذِهِ الأَسْمَاءِ وَالحُرُوفِ، رُدُّوا كَيْدَ مَنْ كَادَنَا إِلَيْهِ، وَاصْرِفُوا أَذَاهُ عَنَّا،
+بِسِرِّ: يَا قَوِيُّ يَا مَتِينُ يَا قَهَّارُ، وَٱللّٰهُ حَسْبُنَا وَنِعْمَ الوَكِيلُ.
+(المصدر: ${v.source})
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+
+  // --- Hajat Baik ---
+  {
+    id: "jam-u-qulub",
+    category: "baik",
+    title: "تأليف القلوب بالمعروف",
+    params: [
+      { key: "nameA", label: "الاسم الأوّل" },
+      { key: "motherA", label: "اسم أمّه/أمّها" },
+      { key: "nameB", label: "الاسم الثاني" },
+      { key: "motherB", label: "اسم أمّه/أمّها" },
+    ],
+    defaults: {
+      nameA: "فُلَان",
+      motherA: "فُلَانَة",
+      nameB: "فُلَان",
+      motherB: "فُلَانَة",
+    },
+    build: (
+      v
+    ) => `يَا خُدَّامَ هَذِهِ الأَسْمَاءِ الشَّرِيفَةِ وَخُدَّامَ الحُرُوفِ،
+أَلِّفُوا بَيْنَ قَلْبِ ${v.nameA} بْنِ/بِنْتِ ${v.motherA}
+وَقَلْبِ ${v.nameB} بْنِ/بِنْتِ ${v.motherB} بِالْمَعْرُوفِ وَالرِّضَا،
+وَاصْرِفُوا مَا فِيهِ مِنْ شِقَاقٍ وَعِتَابٍ وَسُوءِ فَهْمٍ،
+بِسِرِّ: يَا لَطِيفُ يَا جَامِعُ يَا مَأْلُوفُ، وَعَلَى اللّٰهِ فَلْيَتَوَكَّلِ الْمُتَوَكِّلُونَ.
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+  {
+    id: "taysir-umur",
+    category: "baik",
+    title: "تيسير الأمور وفتح الأبواب",
+    params: [{ key: "matter", label: "وصف الأمر/الحاجة" }],
+    defaults: { matter: "[الأمر المطلوب]" },
+    build: (
+      v
+    ) => `يَا خُدَّامَ هَذِهِ الأَسْمَاءِ وَالحُرُوفِ، تَوَسَّطُوا لَنَا فِي ${v.matter}،
+وَيَسِّرُوا الأَسْبَابَ وَافْتَحُوا الأَبْوَابَ بِسِرِّ يَا فَتَّاحُ يَا مُيَسِّرُ،
+ثُمَّ عَلَى اللّٰهِ نَتَوَكَّلُ وَهُوَ حَسْبُنَا وَنِعْمَ الوَكِيلُ.
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+  {
+    id: "rifq-hifzh",
+    category: "baik",
+    title: "الحِفْظُ وَالرِّفْقُ",
+    params: [{ key: "person", label: "اسم الشخص" }],
+    defaults: { person: "فُلَان/فُلَانَة" },
+    build: (
+      v
+    ) => `يَا خُدَّامَ الأَسْمَاءِ وَالحُرُوفِ، احْفَظُوا ${v.person} فِي دِينِهِ وَنَفْسِهِ وَأَهْلِهِ وَمَالِهِ،
+وَالْطُفُوا بِهِ فِي كُلِّ طَرِيقٍ، بِسِرِّ يَا حَفِيظُ يَا لَطِيفُ، وَعَلَى اللّٰهِ نَتَوَكَّلُ.
+الوَاحَا الوَاحَا ، العَجَلَ العَجَلَ، السَّاعَةَ السَّاعَةَ،
+بَارَكَ اللهُ فِيكُمْ.`,
+  },
+]
+
+// ====== Components ======
+const TemplateCard = ({ tpl }) => {
+  const [vars, setVars] = useState(() => ({ ...(tpl.defaults || {}) }))
+  const finalText = useMemo(
+    () => (tpl.build ? tpl.build(vars) : ""),
+    [tpl, vars]
+  )
+
+  return (
+    <div
+      className={`taukil-card ${tpl.category === "baik" ? "baik" : "buruk"}`}
+    >
+      <div className="taukil-card-head">
+        <div>
+          <div className="taukil-card-title">{tpl.title}</div>
+          <div className="taukil-card-kategori">
+            Kategori:{" "}
+            {tpl.category === "baik" ? "Hajat Baik" : "Hajat Buruk/تصريف"}
+          </div>
+        </div>
+        <CopyBtn text={finalText} />
+      </div>
+
+      {tpl.params && tpl.params.length > 0 && (
+        <div className="taukil-inputs" style={{ marginTop: 12 }}>
+          {tpl.params.map((p) => (
+            <ParamInput
+              key={p.key}
+              label={p.label}
+              dir={p.dir || "rtl"}
+              value={vars[p.key] ?? ""}
+              onChange={(val) => setVars((s) => ({ ...s, [p.key]: val }))}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="section-title">النص</div>
+      <div className="text-arabic">{finalText}</div>
+    </div>
+  )
+}
+
+const TaukilSamples = () => {
+  const [tab, setTab] = useState("baik")
+  useEffect(() => {
+    ensureCSS()
+  }, [])
+
+  const list = useMemo(() => templates.filter((t) => t.category === tab), [tab])
+
+  return (
+    <div className="taukil-container">
+      <h1 className="taukil-title">قوالب تَوْكِيل (أمثلة)</h1>
+      <p className="taukil-desc">Contoh teks taukil</p>
+
+      <div className="taukil-tabs">
+        <button
+          className={`taukil-tab ${
+            tab === "baik" ? "taukil-tab--active baik" : ""
+          }`}
+          onClick={() => setTab("baik")}
+        >
+          حاجات حسنة
+        </button>
+        <button
+          className={`taukil-tab ${
+            tab === "buruk" ? "taukil-tab--active buruk" : ""
+          }`}
+          onClick={() => setTab("buruk")}
+        >
+          حاجات ضارّة / تصريف
+        </button>
+      </div>
+
+      <div className="taukil-grid">
+        {list.map((t) => (
+          <TemplateCard key={t.id} tpl={t} />
+        ))}
+      </div>
+
+      <div className="taukil-foot">
+        Catatan:Gunakan dengan adab, hindari mudarat, dan sesuaikan dengan
+        kebutuhan
+      </div>
+    </div>
+  )
+}
+
+export default TaukilSamples
