@@ -1,57 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react"
-
-/**
- * TaukilSamples (Pure CSS version)
- * — Tidak menggunakan Tailwind. Semua styling murni CSS disuntikkan sekali ke <head>.
- */
-
-// ====== PURE CSS (injected once) ======
-const CSS_TEXT = `
-:root{--green:#10b981;--amber:#f59e0b;--border:#ddd;--text:#222;--muted:#666;--bg:#fff;--cardShadow:0 1px 2px rgba(0,0,0,.06)}
-.taukil-container{max-width:980px;margin:0 auto;padding:16px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;color:var(--text)}
-.taukil-title{font-size:28px;font-weight:800;letter-spacing:-.3px;margin:0}
-.taukil-desc{margin:8px 0 12px;color:var(--muted);font-size:14.5px}
-.taukil-tabs{display:flex;gap:8px;margin-top:8px}
-.taukil-tab{border:1px solid var(--border);border-radius:999px;padding:8px 12px;background:#fff;color:#222;cursor:pointer;transition:background .15s,border-color .15s,transform .05s}
-.taukil-tab:active{transform:scale(.99)}
-.taukil-tab--active.baik{background:var(--green);border-color:var(--green);color:#fff}
-.taukil-tab--active.buruk{background:var(--amber);border-color:var(--amber);color:#fff}
-
-.taukil-grid{margin-top:24px;display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:768px){.taukil-inputs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
-
-.taukil-card{border:1px solid var(--border);border-radius:16px;padding:16px;background:#fff;box-shadow:var(--cardShadow)}
-.taukil-card.baik{background:#ecfdf5;border-color:#a7f3d0}
-.taukil-card.buruk{background:#fffbeb;border-color:#fde68a}
-
-.taukil-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.taukil-card-title{font-size:18px;font-weight:800;margin:0 0 6px}
-.taukil-card-kategori{font-size:12px;color:var(--muted)}
-
-.copy-btn{font-size:12px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer}
-.copy-btn:active{transform:scale(.99)}
-
-.param{display:flex;flex-direction:column;gap:4px;font-size:13px}
-.param>span{color:#555}
-.param input{padding:8px 10px;border:1px solid var(--border);border-radius:8px;outline:none}
-.param input:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(147,197,253,.35)}
-
-.section-title{margin-top:12px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#555}
-
-.text-arabic{direction:rtl;text-align:right;white-space:pre-wrap;font-size:18px;line-height:1.9;background:#fff;border:1px solid #e5e7eb;padding:12px;border-radius:12px;font-family:"Scheherazade New","Amiri",serif}
-
-.taukil-foot{margin-top:16px;color:#777;font-size:12px;line-height:1.6}
-`
-
-const ensureCSS = () => {
-  if (typeof document === "undefined") return
-  if (!document.getElementById("taukil-samples-css")) {
-    const style = document.createElement("style")
-    style.id = "taukil-samples-css"
-    style.textContent = CSS_TEXT
-    document.head.appendChild(style)
-  }
-}
+import { useMemo, useState } from "react"
+import "./TaukilTemplate.css"
 
 // ====== UI helpers ======
 const CopyBtn = ({ text }) => {
@@ -244,10 +192,6 @@ const TemplateCard = ({ tpl }) => {
 
 const TaukilSamples = () => {
   const [tab, setTab] = useState("baik")
-  useEffect(() => {
-    ensureCSS()
-  }, [])
-
   const list = useMemo(() => templates.filter((t) => t.category === tab), [tab])
 
   return (
